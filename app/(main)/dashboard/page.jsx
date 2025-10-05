@@ -26,7 +26,10 @@ const DashboardPage = () => {
     }
 
     useEffect(() => {
-        setOrigin(window.location.origin);
+        // setOrigin(window.location.origin);
+        const fullOrigin = window.location.origin; 
+        const noProtocol = fullOrigin.replace(/^https?:\/\//, ''); 
+        setOrigin(noProtocol);
     }, []);
 
     useEffect(() => {
