@@ -14,11 +14,10 @@ import {
 } from "@/components/ui/drawer"
 import { useRouter, useSearchParams } from "next/navigation";
 import EventForm from "./event-form";
+import { Suspense } from "react";
 
-
-
-export function CreateEventDrawer() {
-    const [isOpen, setIsOpen] = React.useState(false);
+function CreateEventDrawerContent() {
+  const [isOpen, setIsOpen] = React.useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -35,19 +34,28 @@ export function CreateEventDrawer() {
       router.replace(window?.location.pathname);
     }
   };
+
   return (
-    <Drawer open={isOpen} onClose={handleClose}>
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Create New Event</DrawerTitle>
-          </DrawerHeader>
-          <EventForm onSubmitForm={()=>handleClose()} />
-          <DrawerFooter>
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
+        <DrawerHeader>
+          <DrawerTitle>Create New Event</DrawerTitle>
+        </DrawerHeader>
+        <EventForm onSubmitForm={() => handleClose()} />
+        <DrawerFooter>
+          <DrawerClose asChild>
+            <Button variant="outline" onClick={handleClose}>Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
+  );
+}
+
+export function CreateEventDrawer() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreateEventDrawerContent />
+    </Suspense>
+  );
 }
